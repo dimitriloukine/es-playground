@@ -1,0 +1,24 @@
+{
+	"index": "experimental_nested",
+	"type": "art",
+	"body": {
+		"query": {
+			"simple_query_string":{
+				"query": "cazes",
+				"default_operator":"and",
+				"fields":[
+					"name",
+					"EV_parent",
+					"appartenance",
+					"segment_marketing",
+					"article_names",
+					"unites_de_besoin",
+					"medailles",
+					"notes_critiques",
+					"cepages"
+				]
+			}
+		}
+	}
+}
+
