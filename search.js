@@ -7,25 +7,28 @@ const client = new elasticsearch.Client({
 });
 
 const inputPath = process.argv[2];
-const outputPath = process.argv[2].split('.')[0] + '.output.json';
-const errorOutputPath = process.argv[2].split('.')[0] + '.error.json';
+const outputPath = inputPath.split('.')[0] + '.output.json';
+const errorOutputPath = inputPath.split('.')[0] + '.error.json';
 
 const query = JSON.parse(fs.readFileSync(inputPath));
-
-
 
 client.ping({
 	requestTimeout: 1000
 }, function (error) {
 	if (error) {
 		console.trace('elasticsearch cluster is down!');
+		process.exit();
 	} else {
 		console.log('All is well');
 	}
 });
 
 client.search(query).then(function(result){
-	fs.writeFileSync(outputPath, JSON.stringify(result, null, '\t'));
+	try {
+		fs.writeFileSync( outputPath, "JSON.stringify(result, null, '\t')");
+	} catch (err) {
+		console.trace('Error writing ' + outputPath + ': ' + err.message);
+	}
 }, function(rejection){
-	fs.writeFileSync(inputPath, JSON.stringify(rejection, null, '\t'));
+	fs.writeFileSync(errorOutputPath, JSON.stringify(rejection, null, '\t'));
 });
